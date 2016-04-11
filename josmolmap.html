@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="Flower_Icon.png">
+    <link href="startup.png" rel="apple-touch-startup-image">
+    <a href="tel:+46-70-7496422">Call me</a>
+
+
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+      .buttons{
+        background-color: #006666;
+        border-radius: 4px;
+        border: solid white;
+        text-align: center;
+        cursor: pointer;
+        padding: 10px;
+        color: #fff;
+        font-family: Open Sans Condensed, sans-serif;
+        font-size: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script> 
+      var map;
+
+      function createControlUI(controlDiv){
+        var controlUI=document.createElement('div');
+        controlUI.className = "buttons";
+        controlDiv.appendChild(controlUI);
+        return controlUI;
+      }
+
+      function ZoomControl(controlDiv,map){
+        var controlUI = createControlUI(controlDiv);
+        
+        var zoomIn = document.createElement('div');
+        zoomIn.innerHTML = '+';
+        controlUI.appendChild(zoomIn);
+
+        var zoomOut = document.createElement('div');
+        zoomOut.innerHTML = '-';
+        controlUI.appendChild(zoomOut);
+
+        google.maps.event.addDomListener(zoomOut,'click', function() {
+          map.setZoom(map.getZoom() - 1);
+        });
+
+        google.maps.event.addDomListener(zoomIn,'click', function() {
+        map.setZoom(map.getZoom() + 1);
+      });
+
+      }
+
+      function upDownPanningControl(controlDiv, map){
+        var controlUI = createControlUI(controlDiv)
+
+        var upPanning = document.createElement('div');
+        upPanning.innerHTML = '^';
+        controlUI.appendChild(upPanning);
+
+        var downPanning = document.createElement('div');
+        downPanning.innerHTML = 'v';
+        controlUI.appendChild(downPanning);
+
+        google.maps.event.addDomListener(upPanning, 'click',function(){
+          map.panBy(0,-10);
+        });
+
+        google.maps.event.addDomListener(downPanning, 'click',function(){
+          map.panBy(0,10);
+        }); 
+
+      }
+
+      function leftPanningControl(controlDiv, map){
+        var controlUI = createControlUI(controlDiv);
+
+        var leftPanning = document.createElement('div');
+        leftPanning.innerHTML = '<';
+        controlUI.appendChild(leftPanning);
+
+        google.maps.event.addDomListener(leftPanning, 'click',function(){
+          map.panBy(-10,0);
+        });
+
+      }
+
+      function rightPanningControl(controlDiv, map){
+        var controlUI = createControlUI(controlDiv)
+
+        var rightPanning = document.createElement('div');
+        rightPanning.innerHTML = '>';
+        controlUI.appendChild(rightPanning);
+
+        google.maps.event.addDomListener(rightPanning, 'click',function(){
+          map.panBy(10,0);
+        });
+      }
+
+      function satelliteView(controlDiv, map){
+        var controlUI = createControlUI(controlDiv);
+        var satelliteButton = document.createElement('div');
+        satelliteButton.innerHTML = 'Satellite';
+        controlUI.appendChild(satelliteButton);
+
+        google.maps.event.addDomListener(satelliteButton, 'click',function(){
+          mapTypeId: google.maps.MapTypeId.SATELLITE;
+        });
+      }
+
+      function toggleBounce(){
+        if(marker.getAnimation() !== null){
+          marker.setAnimation(null);}
+          else{
+            marker.setAnimation(google.maps.Animation.BOUNCE)
+          }
+        }
+
+       function markerWithPos(location, marker){
+            var infowindow = new google.maps.InfoWindow({
+            content: 'Latitude: ' + location.lat() +
+            '<br>Longitude: ' + location.lng()
+            });
+            infowindow.open(map,marker);
+          }
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 59.346580, lng: 18.073250},
+          zoom: 15,
+          disableDefaultUI: true
+          
+        });
+        var marker_1 = new google.maps.Marker({
+          position: {lat: 59.346580, lng: 18.073250},
+          title:"DRAG ME!",
+          draggable: true,
+          animation: google.maps.Animation.DROP
+      });
+      marker_1.addListener('click',toggleBounce);
+      
+        var marker_2 = new google.maps.Marker({
+        position: {lat: 59.346322, lng: 18.071251},
+        title:"You cannot drag me :(",
+        draggable: false
+      });
+
+      google.maps.event.addListener(map, 'click', function(event){
+      markerWithPos(event.latLng, marker_1);
+      });
+
+
+      marker_1.setMap(map);
+      marker_2.setMap(map);
+      map.setTilt(45)
+
+
+      var zoomControlDiv = document.createElement('div');
+      var zoom = new ZoomControl(zoomControlDiv, map);
+      zoomControlDiv.index = 1;
+      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(zoomControlDiv);
+
+      var leftPanningControlDiv = document.createElement('div');
+      var leftPanning = new leftPanningControl(leftPanningControlDiv, map);
+      leftPanningControlDiv.index = 2;
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(leftPanningControlDiv);
+
+      var upDownPanningControlDiv = document.createElement('div');
+      var upDownPanning = new upDownPanningControl(upDownPanningControlDiv, map);
+      upDownPanningControlDiv.index = 3;
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(upDownPanningControlDiv);
+  
+      var rightPanningControlDiv = document.createElement('div');
+      var rightPanning = new rightPanningControl(rightPanningControlDiv, map);
+      rightPanningControlDiv.index = 4;
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(rightPanningControlDiv);
+      
+      var satelliteControlDiv = document.createElement('div');
+      var satelliteButton = new satelliteView(satelliteControlDiv, map);
+      satelliteControlDiv.index = 5;
+      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(satelliteControlDiv);
+
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+    async defer>
+    </script>
+  </body>
+</html>
