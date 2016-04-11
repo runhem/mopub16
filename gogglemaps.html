@@ -4,6 +4,7 @@
     <title>Simple Map</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <meta name="apple-mobile-app-capable" content="yes">
     <style>
       html, body {
         height: 100%;
@@ -50,6 +51,7 @@
         zoomOut.innerHTML = '-';
         controlUI.appendChild(zoomOut);
 
+
         google.maps.event.addDomListener(zoomOut,'click', function() {
           map.setZoom(map.getZoom() - 1);
         });
@@ -61,6 +63,105 @@
 
       }
 
+      function upDownPanningControl(controlDiv, map){
+
+        controlDiv.style.padding = '5px';
+
+        var controlUI=document.createElement('div');
+        controlUI.style.backgroundColor='#006666';
+        controlUI.style.borderRadius = '4px';
+        controlUI.style.border='solid white'
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.textAlign = 'center';
+        controlUI.style.padding='10px';
+        controlUI.title = 'Zoom in';
+        controlDiv.appendChild(controlUI);
+
+
+        var upPanning = document.createElement('div');
+        upPanning.style.color = '#fff';
+        upPanning.style.fontFamily='Open Sans Condensed, sans-serif';
+        upPanning.style.fontSize='16px';
+        upPanning.innerHTML = '^';
+        controlUI.appendChild(upPanning);
+
+        var downPanning = document.createElement('div');
+        downPanning.style.color = '#fff';
+        downPanning.style.fontFamily='Open Sans Condensed, sans-serif';
+        downPanning.style.fontSize='16px';
+        downPanning.innerHTML = 'v';
+        controlUI.appendChild(downPanning);
+
+        google.maps.event.addDomListener(upPanning, 'click',function(){
+          map.panBy(0,-10);
+        });
+
+        google.maps.event.addDomListener(downPanning, 'click',function(){
+          map.panBy(0,10);
+        }); 
+
+      }
+
+      function leftPanningControl(controlDiv, map){
+
+         controlDiv.style.padding = '5px';
+
+        var controlUI=document.createElement('div');
+        controlUI.style.backgroundColor='#006666';
+        controlUI.style.borderRadius = '4px';
+        controlUI.style.border='solid white'
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.textAlign = 'center';
+        controlUI.style.padding='10px';
+        controlUI.title = 'Zoom in';
+        controlDiv.appendChild(controlUI);
+
+
+         var leftPanning = document.createElement('div');
+        leftPanning.style.color = '#fff';
+        leftPanning.style.fontFamily='Open Sans Condensed, sans-serif';
+        leftPanning.style.fontSize='16px';
+        leftPanning.innerHTML = '<';
+        controlUI.appendChild(leftPanning);
+
+        google.maps.event.addDomListener(leftPanning, 'click',function(){
+          map.panBy(-10,0);
+        });
+
+      }
+
+      function rightPanningControl(controlDiv, map){
+         controlDiv.style.padding = '5px';
+
+        var controlUI=document.createElement('div');
+        controlUI.style.backgroundColor='#006666';
+        controlUI.style.borderRadius = '4px';
+        controlUI.style.border='solid white'
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.textAlign = 'center';
+        controlUI.style.padding='10px';
+        controlUI.title = 'Zoom in';
+        controlDiv.appendChild(controlUI);
+
+        var rightPanning = document.createElement('div');
+        rightPanning.style.color = '#fff';
+        rightPanning.style.fontFamily='Open Sans Condensed, sans-serif';
+        rightPanning.style.fontSize='16px';
+        rightPanning.innerHTML = '>';
+        controlUI.appendChild(rightPanning);
+
+        google.maps.event.addDomListener(rightPanning, 'click',function(){
+          map.panBy(10,0);
+        });
+      }
+
+      function toggleBounce(){
+        if(marker.getAnimation() !== null){
+          marker.setAnimation(null);}
+          else{
+            marker.setAnimation(google.maps.Animation.BOUNCE)
+          }
+        }
 
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
@@ -72,8 +173,10 @@
         var marker_1 = new google.maps.Marker({
           position: {lat: 59.346580, lng: 18.073250},
           title:"DRAG ME!",
-          draggable: true
+          draggable: true,
+          animation: google.maps.Animation.DROP
       });
+      marker_1.addListener('click',toggleBounce);
       
         var marker_2 = new google.maps.Marker({
         position: {lat: 59.346322, lng: 18.071251},
@@ -100,6 +203,22 @@
       var zoom = new ZoomControl(zoomControlDiv, map);
       zoomControlDiv.index = 1;
       map.controls[google.maps.ControlPosition.TOP_RIGHT].push(zoomControlDiv);
+
+      var leftPanningControlDiv = document.createElement('div');
+      var leftPanning = new leftPanningControl(leftPanningControlDiv, map);
+      leftPanningControlDiv.index = 2;
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(leftPanningControlDiv);
+
+      var upDownPanningControlDiv = document.createElement('div');
+      var upDownPanning = new upDownPanningControl(upDownPanningControlDiv, map);
+      upDownPanningControlDiv.index = 3;
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(upDownPanningControlDiv);
+
+  
+      var rightPanningControlDiv = document.createElement('div');
+      var rightPanning = new rightPanningControl(rightPanningControlDiv, map);
+      rightPanningControlDiv.index = 4;
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(rightPanningControlDiv);
     }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
