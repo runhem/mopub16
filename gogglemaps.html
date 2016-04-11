@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      var map;
+
+
+      function ZoomControl(controlDiv,map){
+
+        controlDiv.style.padding = '5px';
+
+        var controlUI=document.createElement('div');
+        controlUI.style.backgroundColor='#006666';
+        controlUI.style.borderRadius = '4px';
+        controlUI.style.border='solid white'
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.textAlign = 'center';
+        controlUI.style.padding='10px';
+        controlUI.title = 'Zoom in';
+        controlDiv.appendChild(controlUI);
+
+        var zoomIn = document.createElement('div');
+        zoomIn.style.color = '#fff';
+        zoomIn.style.fontFamily='Open Sans Condensed, sans-serif';
+        zoomIn.style.fontSize='16px';
+        zoomIn.innerHTML = '+';
+        controlUI.appendChild(zoomIn);
+
+
+        var zoomOut = document.createElement('div');
+        zoomOut.style.color = '#fff';
+        zoomOut.style.fontFamily='Open Sans Condensed, sans-serif';
+        zoomOut.style.fontSize='16px';
+        zoomOut.innerHTML = '-';
+        controlUI.appendChild(zoomOut);
+
+        google.maps.event.addDomListener(zoomOut,'click', function() {
+          map.setZoom(map.getZoom() - 1);
+        });
+
+        google.maps.event.addDomListener(zoomIn,'click', function() {
+        map.setZoom(map.getZoom() + 1);
+      });
+
+
+      }
+
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 59.346580, lng: 18.073250},
+          zoom: 15,
+          //disableDefaultUI: true
+          
+        });
+        var marker_1 = new google.maps.Marker({
+          position: {lat: 59.346580, lng: 18.073250},
+          title:"DRAG ME!",
+          draggable: true
+      });
+      
+        var marker_2 = new google.maps.Marker({
+        position: {lat: 59.346322, lng: 18.071251},
+        title:"You cannot drag me :(",
+        draggable: false
+      });
+
+        // Uppdaterar inte när man flyttar markern
+       var coordinates = new google.maps.InfoWindow({     
+          content:'<p>Coordinates' + marker_1.getPosition()+'</p>'
+        });
+
+      google.maps.event.addListener(marker_1, 'click', function(){
+      coordinates.open(map,marker_1)
+      });
+
+
+      marker_1.setMap(map);
+      marker_2.setMap(map);
+      map.setTilt(45)
+
+    
+      var zoomControlDiv = document.createElement('div');
+      var zoom = new ZoomControl(zoomControlDiv, map);
+      zoomControlDiv.index = 1;
+      map.controls[google.maps.ControlPosition.TOP_RIGHT].push(zoomControlDiv);
+    }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+    async defer>
+    </script>
+  </body>
+</html>
