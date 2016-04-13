@@ -5,6 +5,9 @@
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <meta name="apple-mobile-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="Flower_Icon.png">
+
 
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -17,14 +20,12 @@
   </head>
 
   <body>
-         
-    <div id="map-canvas">
-    </div>
-
-  
+     <div id="map-canvas"></div>
     <div class="container">
-        <button id="my_button" class="buttons">hejhej</button>
-    </div>
+        <button id="frida_button" class="buttons" onclick="center('frida')">Vart bor Frida?</button>
+        <button id="alex_button" class="buttons" onclick="center('alex')">Vart bor Alexandra?</button>
+        <button id="josmol_button" class="buttons" onclick="center('josmol')">Josefines favoritplats</button>
+   
 
     <button id="zoom_out" class="buttons" onclick="zoom(-1)">-</button>
     <button id="zoom_in" class="buttons" onclick="zoom(1)">+</button>
@@ -34,6 +35,8 @@
     <button id="pan_down" class="buttons" onclick="pan(0, 10)">v</button>
     <button id="pan_left" class="buttons" onclick="pan(10, 0)">H</button>
     <button id="pan_right" class="buttons" onclick="pan(-10, 0)">R</button>
+     </div>
+     
 
 <!--     //   var map;
 
