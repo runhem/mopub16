@@ -63,7 +63,8 @@ function createMarker(location, markerTitle, isDraggable){
 		position: location,
 		title: markerTitle,
 		draggable: isDraggable,
-		animation: google.maps.Animation.DROP
+		animation: google.maps.Animation.DROP,
+		icon: new google.maps.MarkerImage("icecream.png", undefined, undefined, undefined, new google.maps.Size(40,50))
 	});
 	return marker;
 }
@@ -120,7 +121,7 @@ function geoloco(map){
         lng: position.coords.longitude
       };
       infoWindow2.setPosition(pos);
-      infoWindow2.setContent('Location found.');
+      infoWindow2.setContent('Location found :D');
       map.setCenter(pos);
     },function() { var pos = {
         lat:59.293474,
@@ -128,7 +129,7 @@ function geoloco(map){
     };
     infoWindow2.setPosition(pos);
     map.setCenter(pos);
-    infoWindow2.setContent('No location found, so we put you in Globen');
+    infoWindow2.setContent('No location found, so we put you in Globen obviously');
   	})
 } else {
   	    var pos = {
@@ -137,12 +138,9 @@ function geoloco(map){
     };
     infoWindow2.setPosition(pos);
     map.setCenter(pos);
-    infoWindow2.setContent('Loremipsum');
-
-   
+    infoWindow2.setContent('No location found, so we put you in Globen obviously');
   }
 }
-
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
