@@ -1,7 +1,6 @@
 
 var initialize = function() {
 	var mapOptions = {
-		center: {lat: 59.346580, lng: 18.073250},
 		zoom: 15,
 		tilt: 45,
 		disableDefaultUI:true,
@@ -23,6 +22,7 @@ var initialize = function() {
     marker_josmol.setMap(map);
     marker_alex.setMap(map);
     marker_frida.setMap(map);
+    geoloco(map);	
 
     map.setTilt(45);
 
@@ -109,6 +109,41 @@ function center(name){
 		map.setCenter({lat:59.301081 , lng: 18.009304});
 	}
 }
+ 
+function geoloco(map){
+	var infoWindow2 = new google.maps.InfoWindow({map: map});
+
+	 if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      infoWindow2.setPosition(pos);
+      infoWindow2.setContent('Location found.');
+      map.setCenter(pos);
+    },function() { var pos = {
+        lat:59.293474,
+        lng:18.083293
+    };
+    infoWindow2.setPosition(pos);
+    map.setCenter(pos);
+    infoWindow2.setContent('No location found, so we put you in Globen');
+  	})
+} else {
+  	    var pos = {
+        lat:59.293474,
+        lng:18.083293
+    };
+    infoWindow2.setPosition(pos);
+    map.setCenter(pos);
+    infoWindow2.setContent('Loremipsum');
+
+   
+  }
+}
+
+
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
