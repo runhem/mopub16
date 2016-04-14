@@ -69,6 +69,15 @@ function createMarker(location, markerTitle, isDraggable){
 	return marker;
 }
 
+function createLocoMarker(location){
+	var marker=new google.maps.Marker({
+		position: location,
+		title: "You are here, maybe",
+		icon: new google.maps.MarkerImage("ice_cream_cup_vanilla.png", undefined, undefined, undefined, new google.maps.Size(50,50))
+	})
+	return marker;
+}
+
 function markerWithPos(location, marker){
     var infowindow = new google.maps.InfoWindow({
         content: 'Latitude: ' + location.lat() +
@@ -120,15 +129,19 @@ function geoloco(map){
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
+      var locomark= createLocoMarker(pos);
       infoWindow2.setPosition(pos);
       infoWindow2.setContent('Location found :D');
       map.setCenter(pos);
+      locomark.setMap(map);
     },function() { var pos = {
         lat:59.293474,
         lng:18.083293
     };
     infoWindow2.setPosition(pos);
+    var locomark= createLocoMarker(pos);
     map.setCenter(pos);
+    locomark.setMap(map);
     infoWindow2.setContent('No location found, so we put you in Globen obviously');
   	})
 } else {
