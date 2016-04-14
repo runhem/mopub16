@@ -4,7 +4,8 @@ var initialize = function() {
 		center: {lat: 59.346580, lng: 18.073250},
 		zoom: 15,
 		tilt: 45,
-		disableDefaultUI:true
+		disableDefaultUI:true,
+		mapTypeControl: true
 
 	};
 
@@ -25,22 +26,22 @@ var initialize = function() {
 
     map.setTilt(45);
 
-    google.maps.event.addListener(map, 'click', function(event){
+    google.maps.event.addListener(marker_josmol, 'click', function(event){
       infoWind(marker_josmol, 'josmol');
       map.setCenter(event.latLng);
       });
 
-    google.maps.event.addListener(map, 'click', function(event){
+    google.maps.event.addListener(marker_alex, 'click', function(event){
       infoWind(marker_alex, 'alex');
       map.setCenter(event.latLng);
       });
 
-    google.maps.event.addListener(map, 'click', function(event){
+    google.maps.event.addListener(marker_frida, 'click', function(event){
       infoWind(marker_frida, 'frida');
       map.setCenter(event.latLng);
       });
 
-    google.maps.event.addListener(map, 'click', function(event){
+    google.maps.event.addListener(marker_1, 'click', function(event){
       markerWithPos(event.latLng, marker_1);
       });
 
@@ -48,8 +49,8 @@ var initialize = function() {
 };
 
 
-var zoom = function(num) {	
-	map.getZoom();
+var zoomfunc = function(num) {	
+	var zoom=map.getZoom();
 	map.setZoom(zoom + num);
 }
 
